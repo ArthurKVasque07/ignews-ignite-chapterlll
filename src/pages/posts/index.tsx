@@ -3,7 +3,7 @@ import Head from "next/head";
 import Prismic from "@prismicio/client";
 import { RichText } from "prismic-dom";
 
-import { getPirsmicClient } from "../../services/prismic";
+import { getPrismicClient } from "../../services/prismic";
 import styles from "./styles.module.scss";
 import React from "react";
 import Link from "next/link";
@@ -29,8 +29,8 @@ export default function Posts({ posts }: PostsProps) {
       <main className={styles.container}>
         <div className={styles.posts}>
           {posts.map((posts) => (
-            <Link href={`/posts/${posts.slug}`}>
-              <a key={posts.slug} href="#">
+            <Link key={posts.slug} href={`/posts/${posts.slug}`}>
+              <a href="#">
                 <time>{posts.updatedAt}</time>
                 <strong>{posts.title}</strong>
                 <p>{posts.excerpt}</p>
@@ -44,7 +44,7 @@ export default function Posts({ posts }: PostsProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const prismic = getPirsmicClient();
+  const prismic = getPrismicClient();
 
   const response = await prismic.query(
     [Prismic.predicates.at("document.type", "publication")],
@@ -54,7 +54,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const posts = response.results.map((post) => {
     return {
       slug: post.uid,
-      title: RichText.asText(post.data.title),
+      title: post.data.title,
       excerpt:
         post.data.content.find((content) => content.type === "paragraph")
           ?.text ?? "",

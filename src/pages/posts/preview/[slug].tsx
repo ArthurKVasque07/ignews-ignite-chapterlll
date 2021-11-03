@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { RichText } from "prismic-dom";
 import React from "react";
 import { useEffect } from "react";
-import { getPirsmicClient } from "../../../services/prismic";
+import { getPrismicClient } from "../../../services/prismic";
 import styles from "../post.module.scss";
 
 interface PostPreviewProps {
@@ -67,7 +67,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug } = params;
 
-  const prismic = getPirsmicClient();
+  const prismic = getPrismicClient();
 
   const response = await prismic.getByUID("publication", String(slug), {});
 
